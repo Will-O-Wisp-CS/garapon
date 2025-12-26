@@ -1,9 +1,9 @@
 body { font-family: sans-serif; text-align: center; background: #fff5e6; padding: 20px; }
 .app-container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-/* 画像ファイル名をアップロードしたものに合わせます */
+/* ファイル名を GitHub の garapon.jpg に合わせました */
 #garapon-container, #wheel {
-    --img-path: url('image_942f49.jpg'); 
+    --img-path: url('garapon.jpg'); 
 }
 
 #garapon-container {
@@ -14,32 +14,33 @@ body { font-family: sans-serif; text-align: center; background: #fff5e6; padding
     background: var(--img-path) no-repeat center/contain;
 }
 
-/* 六角形の中心に合わせて位置を微調整 */
+/* 回転する円を最大サイズに調整 (310px) */
 #wheel {
     position: absolute; 
-    top: 68px; /* 画像に合わせて調整 */
-    left: 88px; /* 画像に合わせて調整 */
-    width: 144px; 
-    height: 144px; 
+    top: 5px;    /* 枠ギリギリまで拡大 */
+    left: 5px;   /* 枠ギリギリまで拡大 */
+    width: 310px; 
+    height: 310px; 
     border-radius: 50%;
     background: var(--img-path) no-repeat center;
     background-size: 320px 320px; 
-    background-position: -88px -68px; /* 本体とピッタリ重ねる */
+    background-position: -5px -5px; /* top/leftと同期 */
     transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 5;
 }
 
+/* 玉が出る位置を調整 */
 #ball {
-    width: 25px; height: 25px; border-radius: 50%; position: absolute; 
-    bottom: 50px; left: 50%;
+    width: 28px; height: 28px; border-radius: 50%; position: absolute; 
+    bottom: 40px; left: 50%;
     transform: translateX(-50%) scale(0); 
     transition: all 0.6s cubic-bezier(0.17, 0.67, 0.83, 1.2);
-    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2);
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.3);
     z-index: 10;
 }
 
-.spinning { transform: rotate(1440deg); }
-.drop-ball { transform: translateX(-50%) scale(1) translateY(45px) !important; }
+.spinning { transform: rotate(1800deg); }
+.drop-ball { transform: translateX(-50%) scale(1) translateY(60px) !important; }
 
 #result { font-size: 24px; font-weight: bold; margin: 20px 0; color: #e67e22; min-height: 30px; }
 button { padding: 15px 40px; font-size: 18px; border-radius: 50px; border: none; background: #ff5722; color: white; cursor: pointer; font-weight: bold; }
