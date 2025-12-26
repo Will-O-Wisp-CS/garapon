@@ -1,7 +1,7 @@
 body { font-family: sans-serif; text-align: center; background: #fff5e6; padding: 20px; }
 .app-container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-/* 【最重要】GitHub上のファイル名と一文字一句合わせてください */
+/* 画像ファイル名をアップロードしたものに合わせます */
 #garapon-container, #wheel {
     --img-path: url('image_942f49.jpg'); 
 }
@@ -11,40 +11,35 @@ body { font-family: sans-serif; text-align: center; background: #fff5e6; padding
     width: 320px; 
     height: 320px; 
     margin: 0 auto;
-    /* 画像が読み込めない時のために薄いグレーを背景に設定 */
-    background: #f0f0f0 var(--img-path) no-repeat center/contain;
+    background: var(--img-path) no-repeat center/contain;
 }
 
-/* 回転する円を限界まで大きく（300px） */
+/* 六角形の中心に合わせて位置を微調整 */
 #wheel {
     position: absolute; 
-    top: 10px;    /* 上の余白を最小限に */
-    left: 10px;   /* 左の余白を最小限に */
-    width: 300px; /* 320pxのコンテナに対してほぼいっぱいのサイズ */
-    height: 300px; 
+    top: 68px; /* 画像に合わせて調整 */
+    left: 88px; /* 画像に合わせて調整 */
+    width: 144px; 
+    height: 144px; 
     border-radius: 50%;
     background: var(--img-path) no-repeat center;
-    /* 本体と同じサイズ（320px）で背景を表示 */
     background-size: 320px 320px; 
-    /* leftとtopの値をマイナスにして位置を同期 */
-    background-position: -10px -10px; 
+    background-position: -88px -68px; /* 本体とピッタリ重ねる */
     transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 5;
-    /* 境目が気になる場合は、少しだけ透過させるのも手です */
-    opacity: 0.98;
 }
 
 #ball {
-    width: 28px; height: 28px; border-radius: 50%; position: absolute; 
-    bottom: 45px; left: 50%;
+    width: 25px; height: 25px; border-radius: 50%; position: absolute; 
+    bottom: 50px; left: 50%;
     transform: translateX(-50%) scale(0); 
     transition: all 0.6s cubic-bezier(0.17, 0.67, 0.83, 1.2);
-    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.3);
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2);
     z-index: 10;
 }
 
-.spinning { transform: rotate(1800deg); } /* 回転数も少し増やして5回転に */
-.drop-ball { transform: translateX(-50%) scale(1) translateY(55px) !important; }
+.spinning { transform: rotate(1440deg); }
+.drop-ball { transform: translateX(-50%) scale(1) translateY(45px) !important; }
 
 #result { font-size: 24px; font-weight: bold; margin: 20px 0; color: #e67e22; min-height: 30px; }
 button { padding: 15px 40px; font-size: 18px; border-radius: 50px; border: none; background: #ff5722; color: white; cursor: pointer; font-weight: bold; }
