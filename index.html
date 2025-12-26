@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>年末年始スペシャル！激アツ抽選</title>
+    <title>クラウド抽選機</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app-container">
-    <h1>🎊年末年始スペシャル！激アツ抽選🎊</h1>
+    <h1>🎊 ガラポン抽選機 🎊</h1>
     <div id="loading">接続中...</div>
     <div id="garapon-container">
         <div id="wheel"></div>
         <div id="ball"></div>
     </div>
-    <div id="result-display">
-        <div id="result"></div>
-    </div>
     <button id="draw-btn" onclick="draw()" disabled>抽選を引く！</button>
 </div>
+
+<div id="popup-overlay" onclick="closePopup()">
+    <div id="popup-content" onclick="event.stopPropagation()">
+        <div id="popup-result"></div>
+        <button id="close-btn" onclick="closePopup()">閉じる</button>
+    </div>
+</div>
+
 <script>
-    // 直接CSVの公開URLを使用します
+    // スプレッドシートのCSV URL
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDvh70VdMmZhQb9Yphho6VOIFCYNxM4ABE9OUSUbww0WYH6gSetDpMsiugTOQo28YN9bTCruWjzUyy/pub?output=csv';
 
     let prizes = [];
@@ -40,7 +45,7 @@
             loadingDiv.innerText = "最新データを取得しました";
             document.getElementById('draw-btn').disabled = false;
         } catch (e) {
-            loadingDiv.innerText = "読み込み失敗。リロードしてください。";
+            loadingDiv.innerText = "読み込み失敗。再読み込みしてください。";
             console.error(e);
         }
     }
@@ -49,14 +54,13 @@
         const btn = document.getElementById('draw-btn');
         const wheel = document.getElementById('wheel');
         const ball = document.getElementById('ball');
-        const result = document.getElementById('result');
         btn.disabled = true;
-        result.innerText = "";
+        
         ball.style.transform = "translateX(-50%) scale(0)";
         wheel.style.transition = "none";
         wheel.classList.remove('spinning');
 
-        // 重みに基づく抽選ロジック
+        // 確率に基づいた抽選
         const totalWeight = prizes.reduce((s, p) => s + p.weight, 0);
         let random = Math.random() * totalWeight;
         let selected = prizes[0];
@@ -71,18 +75,33 @@
         setTimeout(() => {
             wheel.style.transition = "transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)";
             wheel.classList.add('spinning');
+            
             setTimeout(() => {
                 ball.style.backgroundColor = selected.color;
                 ball.classList.add('drop-ball');
+                
+                // 玉が落ちた後にポップアップを表示
                 setTimeout(() => {
-                    result.innerText = selected.text;
+                    showPopup(selected.text, selected.color);
                     btn.disabled = false;
-                }, 600);
+                }, 800);
             }, 1500);
         }, 50);
     }
+
+    function showPopup(text, color) {
+        const overlay = document.getElementById('popup-overlay');
+        const result = document.getElementById('popup-result');
+        result.innerText = text;
+        result.style.color = color; 
+        overlay.style.display = 'flex';
+    }
+
+    function closePopup() {
+        document.getElementById('popup-overlay').style.display = 'none';
+    }
+
     loadData();
 </script>
 </body>
 </html>
-
