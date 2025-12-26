@@ -1,0 +1,21 @@
+body { font-family: sans-serif; text-align: center; background: #fff5e6; padding: 20px; }
+.app-container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+#garapon-container {
+    position: relative; width: 300px; height: 300px; margin: 0 auto;
+    background: url('garapon.jpg') no-repeat center/contain;
+}
+#wheel {
+    position: absolute; top: 48px; left: 72px; width: 156px; height: 156px; border-radius: 50%;
+    background: url('garapon.jpg') no-repeat center;
+    background-size: 300px 300px; background-position: -72px -48px;
+    transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#ball {
+    width: 25px; height: 25px; border-radius: 50%; position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%) scale(0); transition: all 0.6s cubic-bezier(0.17, 0.67, 0.83, 1.2);
+}
+.spinning { transform: rotate(1440deg); }
+.drop-ball { transform: translateX(-50%) scale(1) translateY(40px) !important; }
+#result { font-size: 20px; font-weight: bold; margin: 20px 0; color: #e67e22; }
+button { padding: 12px 30px; font-size: 18px; border-radius: 50px; border: none; background: #ff5722; color: white; cursor: pointer; }
+button:disabled { background: #ccc; }

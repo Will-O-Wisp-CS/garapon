@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クラウド抽選機</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-container">
+    <h1>🎊 ガラポン抽選機 🎊</h1>
+    <div id="loading">接続中...</div>
+    <div id="garapon-container">
+        <div id="wheel"></div>
+        <div id="ball"></div>
+    </div>
+    <div id="result-display">
+        <div id="result"></div>
+    </div>
+    <button id="draw-btn" onclick="draw()" disabled>抽選を引く！</button>
+</div>
+<script>
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDvh70VdMmZhQb9Yphho6VOIFCYNxM4ABE9OUSUbww0WYH6gSetDpMsiugTOQo28YN9bTCruWjzUyy/pub?output=csv';
+    const SPREADSHEET_CSV_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_URL);
+    let prizes = [];
+
+    async function loadData() {
+        try {
+            const res = await fetch(SPREADSHEET_CSV_URL);
+            const csv = await res.text();
+            prizes = csv.split(/\r?\n/).slice(1).map(row => {
+                const cols = row.split(',');
+                return cols.length >= 3 ? { color: cols[0].trim(), weight: Number(cols[1]), text: cols[2].trim() } : null;
+            }).filter(p => p && !isNaN(p.weight));
+            document.getElementById('loading').innerText = "最新データを取得しました";
+            document.getElementById('draw-btn').disabled = false;
+        } catch (e) {
+            document.getElementById('loading').innerText = "読み込み失敗。スプレッドシートを確認してください。";
+        }
+    }
+
+    function draw() {
+        const btn = document.getElementById('draw-btn');
+        const wheel = document.getElementById('wheel');
+        const ball = document.getElementById('ball');
+        const result = document.getElementById('result');
+        btn.disabled = true;
+        result.innerText = "";
+        ball.style.transform = "translateX(-50%) scale(0)";
+        wheel.style.transition = "none";
+        wheel.classList.remove('spinning');
+
+        const selected = prizes[Math.floor(Math.random() * prizes.length)]; // 簡易抽選
+
+        setTimeout(() => {
+            wheel.style.transition = "transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)";
+            wheel.classList.add('spinning');
+            setTimeout(() => {
+                ball.style.backgroundColor = selected.color;
+                ball.classList.add('drop-ball');
+                setTimeout(() => {
+                    result.innerText = selected.text;
+                    btn.disabled = false;
+                }, 600);
+            }, 1500);
+        }, 50);
+    }
+    loadData();
+</script>
+</body>
+</html>
