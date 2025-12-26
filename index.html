@@ -14,20 +14,14 @@
         <div id="wheel"></div>
         <div id="ball"></div>
     </div>
+    <div id="result-display">
+        <div id="result"></div>
+    </div>
     <button id="draw-btn" onclick="draw()" disabled>抽選を引く！</button>
 </div>
 
-<div id="popup-overlay" onclick="closePopup()">
-    <div id="popup-content" onclick="event.stopPropagation()">
-        <div id="popup-result"></div>
-        <button id="close-btn" onclick="closePopup()">閉じる</button>
-    </div>
-</div>
-
 <script>
-    // スプレッドシートのCSV URL
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDvh70VdMmZhQb9Yphho6VOIFCYNxM4ABE9OUSUbww0WYH6gSetDpMsiugTOQo28YN9bTCruWjzUyy/pub?output=csv';
-
     let prizes = [];
 
     async function loadData() {
@@ -36,17 +30,14 @@
             const res = await fetch(SPREADSHEET_CSV_URL);
             if (!res.ok) throw new Error('通信エラー');
             const csv = await res.text();
-            
             prizes = csv.split(/\r?\n/).slice(1).map(row => {
                 const cols = row.split(',');
                 return cols.length >= 3 ? { color: cols[0].trim(), weight: Number(cols[1]), text: cols[2].trim() } : null;
             }).filter(p => p && !isNaN(p.weight));
-            
             loadingDiv.innerText = "最新データを取得しました";
             document.getElementById('draw-btn').disabled = false;
         } catch (e) {
             loadingDiv.innerText = "読み込み失敗。再読み込みしてください。";
-            console.error(e);
         }
     }
 
@@ -54,53 +45,35 @@
         const btn = document.getElementById('draw-btn');
         const wheel = document.getElementById('wheel');
         const ball = document.getElementById('ball');
+        const result = document.getElementById('result');
         btn.disabled = true;
-        
+        result.innerText = "";
         ball.style.transform = "translateX(-50%) scale(0)";
         wheel.style.transition = "none";
         wheel.classList.remove('spinning');
 
-        // 確率に基づいた抽選
         const totalWeight = prizes.reduce((s, p) => s + p.weight, 0);
         let random = Math.random() * totalWeight;
         let selected = prizes[0];
         for (const p of prizes) {
-            if (random < p.weight) {
-                selected = p;
-                break;
-            }
+            if (random < p.weight) { selected = p; break; }
             random -= p.weight;
         }
 
         setTimeout(() => {
             wheel.style.transition = "transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)";
             wheel.classList.add('spinning');
-            
             setTimeout(() => {
                 ball.style.backgroundColor = selected.color;
                 ball.classList.add('drop-ball');
-                
-                // 玉が落ちた後にポップアップを表示
                 setTimeout(() => {
-                    showPopup(selected.text, selected.color);
+                    result.innerText = selected.text;
+                    result.style.color = selected.color;
                     btn.disabled = false;
-                }, 800);
+                }, 600);
             }, 1500);
         }, 50);
     }
-
-    function showPopup(text, color) {
-        const overlay = document.getElementById('popup-overlay');
-        const result = document.getElementById('popup-result');
-        result.innerText = text;
-        result.style.color = color; 
-        overlay.style.display = 'flex';
-    }
-
-    function closePopup() {
-        document.getElementById('popup-overlay').style.display = 'none';
-    }
-
     loadData();
 </script>
 </body>
