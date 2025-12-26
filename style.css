@@ -1,8 +1,6 @@
-/* 基本レイアウト */
 body { font-family: sans-serif; text-align: center; background: #fff5e6; padding: 20px; margin: 0; }
 .app-container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-/* 画像設定 */
 #garapon-container, #wheel {
     --img-path: url('garapon.jpg'); 
 }
@@ -15,13 +13,10 @@ body { font-family: sans-serif; text-align: center; background: #fff5e6; padding
     background: var(--img-path) no-repeat center/contain;
 }
 
-/* ガラポン回転部分 */
 #wheel {
     position: absolute; 
-    top: 5px; 
-    left: 5px; 
-    width: 310px; 
-    height: 310px; 
+    top: 5px; left: 5px; 
+    width: 310px; height: 310px; 
     border-radius: 50%;
     background: var(--img-path) no-repeat center;
     background-size: 320px 320px; 
@@ -30,7 +25,6 @@ body { font-family: sans-serif; text-align: center; background: #fff5e6; padding
     z-index: 5;
 }
 
-/* 抽選玉 */
 #ball {
     width: 28px; height: 28px; border-radius: 50%; position: absolute; 
     bottom: 40px; left: 50%;
@@ -43,57 +37,15 @@ body { font-family: sans-serif; text-align: center; background: #fff5e6; padding
 .spinning { transform: rotate(1800deg); }
 .drop-ball { transform: translateX(-50%) scale(1) translateY(60px) !important; }
 
-/* 抽選ボタン */
-button#draw-btn { 
-    margin-top: 20px; padding: 15px 40px; font-size: 18px; border-radius: 50px; 
+#result { 
+    font-size: 28px; 
+    font-weight: bold; 
+    margin: 20px 0; 
+    min-height: 40px; 
+}
+
+button { 
+    padding: 15px 40px; font-size: 18px; border-radius: 50px; 
     border: none; background: #ff5722; color: white; cursor: pointer; font-weight: bold; 
 }
-button#draw-btn:disabled { background: #ccc; cursor: not-allowed; }
-
-/* --- ポップアップ（結果表示） --- */
-
-#popup-overlay {
-    display: none; 
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* 背景を暗くして文字を目立たせる */
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.3s;
-}
-
-#popup-content {
-    background: white;
-    padding: 50px 20px;
-    border-radius: 20px;
-    width: 85%;
-    max-width: 380px;
-    text-align: center;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-#popup-result {
-    font-size: 36px; /* 文字を非常に大きく表示 */
-    font-weight: bold;
-    margin-bottom: 40px;
-    line-height: 1.4;
-    word-break: break-all;
-}
-
-/* ポップアップを閉じるボタン */
-#close-btn {
-    background: #333;
-    color: white;
-    padding: 12px 40px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* アニメーション */
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+button:disabled { background: #ccc; cursor: not-allowed; }
